@@ -19,7 +19,7 @@ public class DatabaseConnection {
     }
 
     public DatabaseConnection() {
-        this.url = "jdbc:mysql://localhost:3306/terminalnorte";
+        this.url = "jdbc:mysql://localhost:3306/terminal";
         this.user = "root";
         this.password = "";
     }

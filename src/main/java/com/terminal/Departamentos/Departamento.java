@@ -1,20 +1,20 @@
 package com.terminal.Departamentos;
 
 public class Departamento {
-    private int id;
+    private int id_departamento;
     private String nombre;
 
-    public Departamento(int id, String nombre) {
-        this.id = id;
+    public Departamento(int id_departamento, String nombre) {
+        this.id_departamento = id_departamento;
         this.nombre = nombre;
     }
 
     public int getId() {
-        return id;
+        return id_departamento;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.id_departamento = id;
     }
 
     public String getNombre() {
@@ -27,6 +27,6 @@ public class Departamento {
 
     @Override
     public String toString() {
-        return "Departamento{id=" + id + ", nombre='" + nombre + "'}";
+        return "Departamento{id=" + id_departamento + ", nombre='" + nombre + "'}";
     }
 }
