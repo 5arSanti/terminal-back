@@ -8,13 +8,6 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() body: LoginDTO): Promise<TokenResponseDTO> {
-    try {
-      const token = this.authService.login(body);
-
-      return token;
-    }
-    catch (error) {
-      throw new UnauthorizedException("Unauthorized");
-    }
+      return await this.authService.login(body);
   }
 }
