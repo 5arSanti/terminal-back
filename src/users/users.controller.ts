@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpException, InternalServerErrorException, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { UsersService } from './services/users.service';
-import { FilterUsersDTO, RegisterUserDTO, UserIdDTO, UserResponseDTO, UsersResponseDTO } from './dto/users.dto';
+import { FilterUsersDTO, RegisterUserDTO, UserIdDTO, UserPrimaryInfoDTO, UserResponseDTO, UsersResponseDTO } from './dto/users.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('users')
@@ -12,32 +12,16 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getUsers(@Query() usersFilters: FilterUsersDTO): Promise<UsersResponseDTO> {
-    try {
-      const users = await this.usersService.getUsers(usersFilters);
-
-      return { users };
-    }
-    catch (error) {
-      if (error instanceof HttpException) { throw error };
-
-      throw new InternalServerErrorException(error.message);
-    }
+  async getUsers(@Query() usersFilters: FilterUsersDTO): Promise<UserResponseDTO[] | UserPrimaryInfoDTO[]> {
+    return await this.usersService.getUsers(usersFilters);
   }
 
 
   @Post()
   async registerUser(@Body() userInfo: RegisterUserDTO) {
-    try {
-      await this.usersService.registrarUsuario(userInfo);
+    await this.usersService.registrarUsuario(userInfo);
 
-      return { success: true, message: 'Usuario registrado con éxito' }
-    }
-    catch (error) {
-      if (error instanceof HttpException) { throw error };
-
-      throw new InternalServerErrorException(error.message);
-    }
+    return { success: true, message: 'Usuario registrado con éxito' }
   }
 
   @UseGuards(JwtAuthGuard)

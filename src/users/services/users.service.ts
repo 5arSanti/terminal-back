@@ -84,6 +84,8 @@ export class UsersService {
             `INSERT INTO usuarios (id, nombre, apellido, correo, contrasena, rol_id) VALUES (?, ?, ?, ?, ?, ?)`,
             [id, nombre, apellido, correo, hashedPassword, rol_id ? rol_id : 2],
         );
+
+        return { message: 'Usuario registrado correctamente' };
     }
 
     async deleteUser(user: UserIdDTO) {
