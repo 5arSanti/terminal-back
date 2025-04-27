@@ -14,6 +14,7 @@ import { DestinosModule } from './destinos/destinos.module';
 import { ModulosModule } from './modulos/modulos.module';
 import { RutasModule } from './rutas/rutas.module';
 import { BoletosModule } from './boletos/boletos.module';
+import { ClientesModule } from './clientes/clientes.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { BoletosModule } from './boletos/boletos.module';
     ModulosModule,
     RutasModule,
     BoletosModule,
+    ClientesModule,
   ],
 })
 export class AppModule { }

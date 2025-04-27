@@ -1,9 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { BoletosService } from './boletos.service';
 
 @Controller('boletos')
 export class BoletosController {
   constructor(private readonly boletosService: BoletosService) {}
 
-  
+  @Get()
+  getBoletos() {
+    return this.boletosService.getBoletos();
+  }
 }
