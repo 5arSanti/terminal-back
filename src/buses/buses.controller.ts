@@ -1,12 +1,42 @@
-import { Controller, Get } from '@nestjs/common';
+// buses/buses.controller.ts
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { BusesService } from './buses.service';
+import { CreateBusDto, UpdateBusDto } from './dto/buses.dto';
 
 @Controller('buses')
 export class BusesController {
   constructor(private readonly busesService: BusesService) {}
 
   @Get()
-  getBuses() {
+  getAll() {
     return this.busesService.getBuses();
+  }
+
+  @Post()
+  create(@Body() dto: CreateBusDto) {
+    return this.busesService.createBus(dto);
+  }
+
+  @Put(':placa')
+  update(
+    @Param('placa') placa: string,
+    @Body() dto: UpdateBusDto,
+  ) {
+    return this.busesService.updateBus(placa, dto);
+  }
+
+  @Delete(':placa')
+  delete(@Param('placa') placa: string) {
+    return this.busesService.deleteBus(placa);
   }
 }
