@@ -15,7 +15,7 @@ import { CreateBusDto, UpdateBusDto } from './dto/buses.dto';
 
 @Controller('buses')
 export class BusesController {
-  constructor(private readonly busesService: BusesService) {}
+  constructor(private readonly busesService: BusesService) { }
 
   @Get()
   getAll() {
@@ -28,10 +28,7 @@ export class BusesController {
   }
 
   @Put(':placa')
-  update(
-    @Param('placa') placa: string,
-    @Body() dto: UpdateBusDto,
-  ) {
+  update(@Param('placa') placa: string, @Body() dto: UpdateBusDto) {
     return this.busesService.updateBus(placa, dto);
   }
 

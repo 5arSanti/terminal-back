@@ -64,6 +64,7 @@ export class BusesService {
 
         const fields = [];
         const params = [];
+        
         for (const [key, value] of Object.entries(dto)) {
             fields.push(`${key} = ?`);
             params.push(value);
@@ -90,6 +91,7 @@ export class BusesService {
             `SELECT Placa FROM Buses WHERE Placa = ?`,
             [placa],
         );
+
         if (!existing) {
             throw new NotFoundException(`Bus con placa ${placa} no encontrado`);
         }
