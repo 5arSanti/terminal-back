@@ -1,7 +1,9 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { ExceptionsFilter } from './core/filters/exceptions.filter';
+import { ErrorResponseInterceptor } from './common/interceptors/error-response.interceptor';
+import { RpcCustomExceptionFilter } from './common/filters/rpc-exception.filter';
+import validationOptions from './common/utils/validation-options';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,16 +12,10 @@ async function bootstrap() {
 
   const httpAdapterHost = app.get(HttpAdapterHost);
   
-  app.useGlobalFilters(new ExceptionsFilter(httpAdapterHost));
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      transformOptions: { enableImplicitConversion: true },
-      forbidNonWhitelisted: false,
-    }),
-  );
+  // Set the global pipes
+  app.useGlobalInterceptors(new ErrorResponseInterceptor());
+  app.useGlobalPipes(new ValidationPipe(validationOptions));
+  app.useGlobalFilters(new RpcCustomExceptionFilter());
 
   app.setGlobalPrefix('api/v1');
 

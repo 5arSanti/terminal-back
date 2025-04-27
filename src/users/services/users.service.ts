@@ -80,10 +80,16 @@ export class UsersService {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(contrasena, saltRounds);
 
-        await this.dataSource.query(
-            `INSERT INTO usuarios (id, nombre, apellido, correo, contrasena, rol_id) VALUES (?, ?, ?, ?, ?, ?)`,
-            [id, nombre, apellido, correo, hashedPassword, rol_id ? rol_id : 2],
-        );
+        try {
+            await this.dataSource.query(
+                `INSERT INTO usuarios (id, nombre, apellido, correo, contrasena, rol_id) VALUES (?, ?, ?, ?, ?, ?)`,
+                [id, nombre, apellido, correo, hashedPassword, rol_id ? rol_id : 2],
+            );
+            
+        } catch (error) {
+            console.log(error)
+        }
+
 
         return { message: 'Usuario registrado correctamente' };
     }

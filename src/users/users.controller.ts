@@ -19,9 +19,7 @@ export class UsersController {
 
   @Post()
   async registerUser(@Body() userInfo: RegisterUserDTO) {
-    await this.usersService.registrarUsuario(userInfo);
-
-    return { success: true, message: 'Usuario registrado con éxito' }
+    return await this.usersService.registrarUsuario(userInfo);
   }
 
   @UseGuards(JwtAuthGuard)
