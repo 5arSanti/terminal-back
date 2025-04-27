@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, InternalServerErrorException, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { UsersService } from './services/users.service';
 import { FilterUsersDTO, RegisterUserDTO, UserIdDTO, UserPrimaryInfoDTO, UserResponseDTO } from './dto/users.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
