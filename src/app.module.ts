@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { DatabaseModule } from './database/database.module';
 import appConfigurations from './config/app.config';
 import { UsersModule } from './users/users.module';
+import { BusesModule } from './buses/buses.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UsersModule } from './users/users.module';
       signOptions: { expiresIn: '1h' },
     }),
     DatabaseModule,
+    BusesModule,
   ],
 })
 export class AppModule { }
