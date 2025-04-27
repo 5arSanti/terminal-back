@@ -7,6 +7,7 @@ import appConfigurations from './config/app.config';
 import { UsersModule } from './users/users.module';
 import { BusesModule } from './buses/buses.module';
 import { SedesModule } from './sedes/sedes.module';
+import { EnviosModule } from './envios/envios.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SedesModule } from './sedes/sedes.module';
     DatabaseModule,
     BusesModule,
     SedesModule,
+    EnviosModule,
   ],
 })
 export class AppModule { }
