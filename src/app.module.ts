@@ -12,6 +12,7 @@ import { EmpleadosModule } from './empleados/empleados.module';
 import { CiudadesModule } from './ciudades/ciudades.module';
 import { DestinosModule } from './destinos/destinos.module';
 import { ModulosModule } from './modulos/modulos.module';
+import { RutasModule } from './rutas/rutas.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ModulosModule } from './modulos/modulos.module';
     CiudadesModule,
     DestinosModule,
     ModulosModule,
+    RutasModule,
   ],
 })
 export class AppModule { }
