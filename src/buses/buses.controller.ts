@@ -7,12 +7,13 @@ import {
   Param,
   Put,
   Delete,
-  HttpCode,
-  HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { BusesService } from './buses.service';
 import { CreateBusDto, UpdateBusDto } from './dto/buses.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('buses')
 export class BusesController {
   constructor(private readonly busesService: BusesService) { }
