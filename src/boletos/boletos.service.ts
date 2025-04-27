@@ -1,3 +1,4 @@
+// boletos/boletos.service.ts
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { PurchaseBoletoDto } from './dto/boletos.dto';
@@ -10,10 +11,10 @@ export class BoletosService {
         return this.dataSource.query(`SELECT * FROM Boletos`);
     }
 
-    async purchaseBoleto(dto: PurchaseBoletoDto) {
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
+    async purchaseBoleto(dto: Omit<PurchaseBoletoDto, 'numero_asiento'>) {
+        const qr = this.dataSource.createQueryRunner();
+        await qr.connect();
+        await qr.startTransaction();
 
         try {
             const {
@@ -26,83 +27,102 @@ export class BoletosService {
                 valor,
             } = dto;
 
-            const buses = await queryRunner.query(
+            const buses = await qr.query(
                 `SELECT id_bus FROM Detalle_Buses_Rutas WHERE id_ruta = ?`,
                 [id_ruta],
             );
-
-            if (buses.length === 0) {
-                throw new BadRequestException('No hay buses asignados a esa ruta');
-            }
+            if (!buses.length) throw new BadRequestException('Sin buses en esa ruta');
             const placaBus = buses[0].id_bus;
 
-            const [busInfo] = await queryRunner.query(
-                `SELECT Capacidad FROM Buses WHERE Placa = ?`,
-                [placaBus],
+            const [busInfo] = await qr.query(
+                `SELECT Capacidad FROM Buses WHERE Placa = ?`, [placaBus],
             );
 
-            const capacidad = busInfo?.Capacidad;
-            if (!capacidad) {
-                throw new BadRequestException('No se encontró información de capacidad del bus');
-            }
+            if (!busInfo) throw new BadRequestException('Bus no encontrado');
 
-            const viajeResult = await queryRunner.query(`
-                INSERT INTO Viajes
+            const capacidad = busInfo.Capacidad;
+
+            const viajeRes = await qr.query(
+                `INSERT INTO Viajes
                 (Fecha_salida, Valor, id_bus, id_conductor, id_ruta, id_ciudad_origen, id_ciudad_destino)
-                VALUES (
-                    ?, ?, ?, ?, ?,
+                    VALUES (?, ?, ?, ?, ?,
                     (SELECT id_ciudad_origen FROM Destinos WHERE id_destino = ?),
                     (SELECT id_ciudad_destino FROM Destinos WHERE id_destino = ?)
                 )`,
                 [fecha_salida, valor, placaBus, id_empleado, id_ruta, id_destino, id_destino],
             );
-            const id_viaje = viajeResult.insertId;
 
-            const [{ total }] = await queryRunner.query(
-                `SELECT COUNT(*) AS total
-                FROM Boletos b
-                    JOIN Viajes v ON v.id_viaje = ?
+            const id_viaje = viajeRes.insertId;
 
-                WHERE b.id_bus = v.id_bus
-                AND v.Fecha_salida = ?
-                `,
-                [id_viaje, fecha_salida],
+            const [{ total }] = await qr.query(
+                `SELECT COUNT(*) AS total FROM Boletos
+                WHERE id_bus = ? AND id_ruta = ? AND Numero_asiento IS NOT NULL`,
+                [placaBus, id_ruta],
             );
             const numero_asiento = total + 1;
-            if (numero_asiento > capacidad) {
-                throw new BadRequestException('No quedan asientos disponibles en este bus');
-            }
+            if (numero_asiento > capacidad) throw new BadRequestException('Bus lleno');
 
-            const boletoResult = await queryRunner.query(
+            const boletoRes = await qr.query(
                 `INSERT INTO Boletos
                 (Numero_asiento, id_destino, id_empresa, id_bus, id_ruta)
-                VALUES (?, ?, 
-                (SELECT e.id_empresa
-                    FROM Destinos d
-                        JOIN Modulos m ON d.id_modulo = m.id_modulo
-                        JOIN Empresas e ON m.id_sede = e.id_empresa
-
-                    WHERE d.id_destino = ?
-                ), ?, ? )`,
-                [numero_asiento, id_destino, id_destino, placaBus, id_ruta],
+                    VALUES (?, ?, 
+                        (SELECT id_empresa FROM Buses WHERE Placa = ?),
+                        ?, ?
+                    )`,
+                [numero_asiento, id_destino, placaBus, placaBus, id_ruta],
             );
-            const id_boleto = boletoResult.insertId;
+            const id_boleto = boletoRes.insertId;
 
-            await queryRunner.query(`
+            const facturaRes = await qr.query(`
                 INSERT INTO Factura
                 (Valor_total, lleva_mercancia, id_cliente, id_empleado, id_boleto, id_viaje, id_metodo_pago)
-                
                 VALUES (?, FALSE, ?, ?, ?, ?, ?)`,
                 [valor, id_cliente, id_empleado, id_boleto, id_viaje, id_metodo_pago],
             );
+            const id_factura = facturaRes.insertId;
 
-            await queryRunner.commitTransaction();
-            return { message: 'Compra completada', id_viaje, id_boleto, numero_asiento };
+            await qr.commitTransaction();
+
+            const [facturaCompleta] = await this.dataSource.query(`
+                SELECT
+                f.id_factura,
+                f.Fecha_facturacion,
+                f.Valor_total,
+                mp.Nombre AS metodo_pago,
+                CONCAT(c.Nombres, ' ', c.Apellidos) AS cliente,
+                CONCAT(e.Nombres, ' ', e.Apellidos) AS empleado,
+                v.id_viaje,
+                v.Fecha_salida AS fecha_viaje,
+                b.id_boleto,
+                b.Numero_asiento AS asiento,
+                dest.Nombre AS destino,
+                r.Nombre AS ruta,
+                bus.Placa AS placa_bus,
+                bus.Capacidad AS capacidad_bus,
+                empb.Nombres AS conductor_nombre,
+                empb.Apellidos AS conductor_apellido
+                
+                FROM Factura f
+                    JOIN Metodo_pago mp ON f.id_metodo_pago = mp.id_metodo_pago
+                    JOIN Cliente c ON f.id_cliente = c.id_cliente
+                    JOIN Empleados e ON f.id_empleado = e.cedula_empleado
+                    JOIN Viajes v ON f.id_viaje = v.id_viaje
+                    JOIN Boletos b ON f.id_boleto = b.id_boleto
+                    JOIN Destinos dest ON b.id_destino = dest.id_destino
+                    JOIN Rutas r ON b.id_ruta = r.id_ruta
+                    JOIN Buses bus ON v.id_bus = bus.Placa
+                    JOIN Empleados empb ON v.id_conductor = empb.cedula_empleado
+                WHERE f.id_factura = ?
+        `,
+                [id_factura],
+            );
+
+            return facturaCompleta;
         } catch (err) {
-            await queryRunner.rollbackTransaction();
+            await qr.rollbackTransaction();
             throw err;
         } finally {
-            await queryRunner.release();
+            await qr.release();
         }
     }
 }
