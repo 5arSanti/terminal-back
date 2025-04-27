@@ -8,6 +8,8 @@ import { UsersModule } from './users/users.module';
 import { BusesModule } from './buses/buses.module';
 import { SedesModule } from './sedes/sedes.module';
 import { EnviosModule } from './envios/envios.module';
+import { EmpleadosModule } from './empleados/empleados.module';
+import { CiudadesModule } from './ciudades/ciudades.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { EnviosModule } from './envios/envios.module';
     BusesModule,
     SedesModule,
     EnviosModule,
+    EmpleadosModule,
+    CiudadesModule,
   ],
 })
 export class AppModule { }
