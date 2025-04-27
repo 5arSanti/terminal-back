@@ -1,7 +1,6 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { DataSource } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from "bcryptjs"
 import { FilterUsersDTO, RegisterUserDTO, UserIdDTO, UserPrimaryInfoDTO, UserResponseDTO } from '../dto/users.dto';
 
 
@@ -68,6 +67,7 @@ export class UsersService {
 
         if (!(contrasena === confirmar_contraseña)) throw new BadRequestException('Las contraseñas no coinciden');
 
+
         const usuarioExistente = await this.dataSource.query(
             'SELECT * FROM usuarios WHERE correo = ? OR id = ? LIMIT 1',
             [correo, id],
@@ -77,19 +77,13 @@ export class UsersService {
             throw new BadRequestException('Este usuario ya se encuentra registrado');
         }
 
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(contrasena, saltRounds);
+        const hashedPassword = await bcrypt.hash(contrasena, 4);
 
-        try {
-            await this.dataSource.query(
-                `INSERT INTO usuarios (id, nombre, apellido, correo, contrasena, rol_id) VALUES (?, ?, ?, ?, ?, ?)`,
-                [id, nombre, apellido, correo, hashedPassword, rol_id ? rol_id : 2],
-            );
-            
-        } catch (error) {
-            console.log(error)
-        }
-
+        await this.dataSource.query(
+            `INSERT INTO usuarios (id, nombre, apellido, correo, contrasena, rol_id)
+            VALUES (?, ?, ?, ?, ?, ?)`,
+            [id, nombre, apellido, correo, hashedPassword, rol_id ?? 2],
+        );
 
         return { message: 'Usuario registrado correctamente' };
     }
