@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BusesService } from './buses.service';
-import { CreateBusDto, UpdateBusDto } from './dto/buses.dto';
+import { CreateBusDto, CreateBusTypeDto, UpdateBusDto } from './dto/buses.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @UseGuards(JwtAuthGuard)
@@ -28,13 +28,23 @@ export class BusesController {
     return this.busesService.createBus(dto);
   }
 
-  @Put(':placa')
+  @Put('bus/:placa')
   update(@Param('placa') placa: string, @Body() dto: UpdateBusDto) {
     return this.busesService.updateBus(placa, dto);
   }
 
-  @Delete(':placa')
+  @Delete('bus/:placa')
   delete(@Param('placa') placa: string) {
     return this.busesService.deleteBus(placa);
+  }
+
+  @Get("types")
+  getTypes() {
+    return this.busesService.getBusTypes();
+  }
+
+  @Post("types")
+  createType(@Body() createBusTypeDto: CreateBusTypeDto) {
+    return this.busesService.createBusType(createBusTypeDto);
   }
 }

@@ -100,4 +100,22 @@ export class BusesService {
         );
         return { deleted: true };
     }
+
+    async getBusTypes() {
+        return this.dataSource.query(`
+            SELECT *
+            FROM Tipo_bus
+        `);
+    }
+
+    async createBusType(dto: { nombre: string }) {
+        const { nombre } = dto;
+
+        await this.dataSource.query(`
+            INSERT INTO Tipo_bus (Nombre)
+            VALUES (?)
+        `, [nombre]);
+
+        return { message: "Tipo de bus creado con éxito" };
+    }
 }
