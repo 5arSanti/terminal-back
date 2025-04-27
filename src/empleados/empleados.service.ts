@@ -1,11 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import { CreateTipoEmpleadoDto, EmpleadoDto, UpdateEmpleadoDto } from './dto/empleados.dto';
 
 @Injectable()
 export class EmpleadosService {
     constructor(@Inject("DATA_SOURCE") private readonly dataSource: DataSource) { }
 
-    // Obtener todos los empleados
     async getEmpleados() {
         return await this.dataSource.query(`
             SELECT *
@@ -13,7 +13,6 @@ export class EmpleadosService {
         `);
     }
 
-    // Obtener un empleado por cédula
     async getEmpleadoById(cedula_empleado: number) {
         const result = await this.dataSource.query(`
             SELECT *
@@ -24,17 +23,7 @@ export class EmpleadosService {
         return result[0];
     }
 
-    async createEmpleado(data: {
-        cedula_empleado: number;
-        Nombres: string;
-        Apellidos: string;
-        Telefono: string;
-        Correo: string;
-        id_ciudad_origen: number;
-        id_ciudad_residencia: number;
-        id_tipo_empleado: number;
-        id_sede: number;
-    }) {
+    async createEmpleado(data: EmpleadoDto) {
         await this.dataSource.query(`
             INSERT INTO Empleados (
                 cedula_empleado,
@@ -62,17 +51,7 @@ export class EmpleadosService {
         return { message: 'Empleado creado exitosamente' };
     }
 
-    // Editar un empleado
-    async updateEmpleado(cedula_empleado: number, data: {
-        Nombres?: string;
-        Apellidos?: string;
-        Telefono?: string;
-        Correo?: string;
-        id_ciudad_origen?: number;
-        id_ciudad_residencia?: number;
-        id_tipo_empleado?: number;
-        id_sede?: number;
-    }) {
+    async updateEmpleado(cedula_empleado: number, data: UpdateEmpleadoDto) {
         await this.dataSource.query(`
             UPDATE Empleados
             SET
@@ -107,5 +86,26 @@ export class EmpleadosService {
         `, [cedula_empleado]);
 
         return { message: 'Empleado eliminado exitosamente' };
+    }
+
+    async getTiposEmpleado() {
+        return this.dataSource.query(`
+            SELECT
+                id_tipo_empleado,
+                Nombre,
+                descripcion
+            FROM Tipo_empleado
+        `);
+    }
+
+    async createTipoEmpleado(data: CreateTipoEmpleadoDto) {
+        const { Nombre, descripcion } = data;
+
+        await this.dataSource.query(`
+            INSERT INTO Tipo_empleado (Nombre, descripcion)
+            VALUES (?, ?)
+        `, [Nombre, descripcion]);
+
+        return { message: 'Tipo de empleado creado exitosamente' };
     }
 }

@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { EmpleadosService } from './empleados.service';
+import { CreateTipoEmpleadoDto, EmpleadoDto, UpdateEmpleadoDto } from './dto/empleados.dto';
 
 @Controller('empleados')
 export class EmpleadosController {
@@ -10,26 +11,34 @@ export class EmpleadosController {
     return this.empleadosService.getEmpleados();
   }
 
-  @Get(':cedula_empleado')
+  @Get('empleado/:cedula_empleado')
   getEmpleado(@Param('cedula_empleado') cedula: number) {
     return this.empleadosService.getEmpleadoById(cedula);
   }
 
   @Post()
-  createEmpleado(@Body() body: any) {
+  createEmpleado(@Body() body: EmpleadoDto) {
     return this.empleadosService.createEmpleado(body);
   }
 
-  @Put(':cedula_empleado')
-  updateEmpleado(
-    @Param('cedula_empleado') cedula: number,
-    @Body() body: any
-  ) {
+  @Put('empleado/:cedula_empleado')
+  updateEmpleado(@Param('cedula_empleado') cedula: number, @Body() body: UpdateEmpleadoDto) {
     return this.empleadosService.updateEmpleado(cedula, body);
   }
 
-  @Delete(':cedula_empleado')
+  @Delete('empleado/:cedula_empleado')
   deleteEmpleado(@Param('cedula_empleado') cedula: number) {
     return this.empleadosService.deleteEmpleado(cedula);
   }
+
+  @Get("types")
+  getAll() {
+    return this.empleadosService.getTiposEmpleado();
+  }
+
+  @Post("types")
+  create(@Body() body: CreateTipoEmpleadoDto) {
+    return this.empleadosService.createTipoEmpleado(body);
+  }
+
 }
