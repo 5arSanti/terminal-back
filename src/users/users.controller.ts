@@ -25,15 +25,6 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Delete()
   async deleteUser(@Query() user: UserIdDTO) {
-    try {
-      await this.usersService.deleteUser(user);
-
-      return { success: true, message: 'Usuario eliminado con éxito' };
-    }
-    catch (error) {
-      if (error instanceof HttpException) { throw error };
-
-      throw new InternalServerErrorException(error.message);
-    }
+    return await this.usersService.deleteUser(user);
   }
 }
