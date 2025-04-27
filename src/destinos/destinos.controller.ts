@@ -9,4 +9,9 @@ export class DestinosController {
   getAll() {
     return this.destinosService.getDestinos();
   }
+
+  @Get('routes')
+  getDetalleDestinosRutas() {
+    return this.destinosService.getDetalleDestinosRutas();
+  }
 }

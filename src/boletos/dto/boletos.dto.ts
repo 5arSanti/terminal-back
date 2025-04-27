@@ -3,8 +3,7 @@ export class PurchaseBoletoDto {
     id_empleado: number;
     id_destino: number;
     id_ruta: number;
-    fecha_salida: string;
+    fecha_salida: Date;
     id_metodo_pago: number;
     valor: number;
-    numero_asiento: number;
 }

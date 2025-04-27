@@ -7,8 +7,7 @@ export class ClientesService {
     constructor(@Inject("DATA_SOURCE") private readonly dataSource: DataSource) { }
 
     async getClientes() {
-        const query = `SELECT * FROM Clientes`;
-
+        const query = `SELECT * FROM Cliente`;
         return await this.dataSource.query(query);
     }
 }
