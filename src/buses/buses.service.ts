@@ -38,13 +38,11 @@ export class BusesService {
             id_empleado = null,
         } = dto;
 
-        await this.dataSource.query(
-            `INSERT INTO Buses
-        (Placa, Marca, Capacidad, id_tipo_bus, id_empresa, id_empleado)
-       VALUES (?, ?, ?, ?, ?, ?)
-      `,
-            [placa, marca, capacidad, id_tipo_bus, id_empresa, id_empleado],
-        );
+        await this.dataSource.query(`
+            INSERT INTO Buses
+            (Placa, Marca, Capacidad, id_tipo_bus, id_empresa, id_empleado)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `, [placa, marca, capacidad, id_tipo_bus, id_empresa, id_empleado]);
 
         const [bus] = await this.dataSource.query(
             `SELECT * FROM Buses WHERE Placa = ?`,
@@ -64,7 +62,7 @@ export class BusesService {
 
         const fields = [];
         const params = [];
-        
+
         for (const [key, value] of Object.entries(dto)) {
             fields.push(`${key} = ?`);
             params.push(value);
