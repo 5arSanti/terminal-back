@@ -40,5 +40,4 @@ export class EmpleadosController {
   create(@Body() body: CreateTipoEmpleadoDto) {
     return this.empleadosService.createTipoEmpleado(body);
   }
-
 }

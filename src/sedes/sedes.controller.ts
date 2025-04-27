@@ -17,19 +17,8 @@ export class SedesController {
     return this.sedesService.getTiposEmpleadoPorSede(id_sede);
   }
 
-  @Get('modules')
-  getModulos() {
-    return this.sedesService.getModulos();
-  }
-
-  @Get("destinations")
-  getDestinos() {
-    return this.sedesService.getDestinos();
-  }
-
   @Get("intermediate-stops")
   getParadasIntermedias() {
     return this.sedesService.getParadasIntermedias();
   }
-
 }

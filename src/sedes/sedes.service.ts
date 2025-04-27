@@ -36,18 +36,6 @@ export class SedesService {
         `, [id_sede]);
     }
 
-    async getModulos() {
-        return await this.dataSource.query(`
-            SELECT 
-                m.id_modulo,
-                m.Nombre AS modulo,
-                s.Nombre AS sede
-            
-                FROM Modulos m
-            JOIN Sedes s ON m.id_sede = s.id_sede
-        `);
-    }
-
 
     async getDestinos() {
         return await this.dataSource.query(`

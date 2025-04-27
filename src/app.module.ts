@@ -10,6 +10,8 @@ import { SedesModule } from './sedes/sedes.module';
 import { EnviosModule } from './envios/envios.module';
 import { EmpleadosModule } from './empleados/empleados.module';
 import { CiudadesModule } from './ciudades/ciudades.module';
+import { DestinosModule } from './destinos/destinos.module';
+import { ModulosModule } from './modulos/modulos.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { CiudadesModule } from './ciudades/ciudades.module';
     EnviosModule,
     EmpleadosModule,
     CiudadesModule,
+    DestinosModule,
+    ModulosModule,
   ],
 })
 export class AppModule { }
