@@ -30,7 +30,7 @@ export class BoletosService {
                 `SELECT id_bus FROM Detalle_Buses_Rutas WHERE id_ruta = ?`,
                 [id_ruta],
             );
-            
+
             if (buses.length === 0) {
                 throw new BadRequestException('No hay buses asignados a esa ruta');
             }
@@ -40,7 +40,7 @@ export class BoletosService {
                 `SELECT Capacidad FROM Buses WHERE Placa = ?`,
                 [placaBus],
             );
-            
+
             const capacidad = busInfo?.Capacidad;
             if (!capacidad) {
                 throw new BadRequestException('No se encontró información de capacidad del bus');
@@ -79,12 +79,11 @@ export class BoletosService {
                 VALUES (?, ?, 
                 (SELECT e.id_empresa
                     FROM Destinos d
-                    JOIN Modulos m ON d.id_modulo = m.id_modulo
-                    JOIN Empresas e ON m.id_sede = e.id_empresa
+                        JOIN Modulos m ON d.id_modulo = m.id_modulo
+                        JOIN Empresas e ON m.id_sede = e.id_empresa
 
-                WHERE d.id_destino = ?),
-                ?, ?
-                )`,
+                    WHERE d.id_destino = ?
+                ), ?, ? )`,
                 [numero_asiento, id_destino, id_destino, placaBus, id_ruta],
             );
             const id_boleto = boletoResult.insertId;
