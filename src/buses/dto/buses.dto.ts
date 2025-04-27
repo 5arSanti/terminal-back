@@ -31,3 +31,10 @@ export class CreateBusDto {
 
 
 export class UpdateBusDto extends PartialType(CreateBusDto) { }
+
+
+export class CreateBusTypeDto {
+    @IsNotEmpty()
+    @IsString()
+    nombre: string;
+}
