@@ -10,7 +10,7 @@ export class UsersController {
     private usersService: UsersService
   ) { }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getUsers(@Query() usersFilters: FilterUsersDTO): Promise<UserResponseDTO[] | UserPrimaryInfoDTO[]> {
     return await this.usersService.getUsers(usersFilters);
@@ -19,12 +19,7 @@ export class UsersController {
 
   @Post()
   async registerUser(@Body() userInfo: RegisterUserDTO) {
-    try {
-      return await this.usersService.registrarUsuario(userInfo);
-      
-    } catch (error) {
-      console.log(error);
-    }
+    return await this.usersService.registrarUsuario(userInfo);
   }
 
   @UseGuards(JwtAuthGuard)
