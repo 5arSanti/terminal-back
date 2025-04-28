@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { BoletoDto } from './dto/boleto.dto';
-import { BoletoDto } from './dto/boleto.dto';
 
 @Injectable()
 export class BoletosService {
