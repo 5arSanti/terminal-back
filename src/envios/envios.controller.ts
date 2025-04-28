@@ -6,6 +6,5 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 @Controller('envios')
 export class EnviosController {
   constructor(private readonly enviosService: EnviosService) {}
-
-
+  
 }
