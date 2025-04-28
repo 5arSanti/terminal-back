@@ -10,7 +10,7 @@ import { DataSource } from 'typeorm';
             inject: [ConfigService],
             useFactory: async (configService: ConfigService) => {
                 const maxRetries = 10;
-                const retryDelay = 5000;
+                const retryDelay = 6000;
 
                 let retries = 0;
                 while (retries < maxRetries) {
