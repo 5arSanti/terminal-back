@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 
 @Injectable()
 export class ViajesService {
-  constructor(@Inject('DATA_SOURCE') private readonly dataSource: DataSource) {}
+  constructor(@Inject('DATA_SOURCE') private readonly dataSource: DataSource) { }
 
   // Obtener todos los viajes
   async getViajes() {
