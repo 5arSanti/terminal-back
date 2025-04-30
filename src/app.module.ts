@@ -18,6 +18,7 @@ import { ClientesModule } from './clientes/clientes.module';
 import { MetodosPagoModule } from './metodos-pago/metodos-pago.module';
 import { MercanciaModule } from './mercancia/mercancia.module';
 import { DepartamentosModule } from './departamentos/departamentos.module';
+import { ViajesModule } from './Viajes/viajes.module';
 
 @Module({
   imports: [
@@ -45,7 +46,8 @@ import { DepartamentosModule } from './departamentos/departamentos.module';
     ClientesModule,
     MetodosPagoModule,
     MercanciaModule,
-    DepartamentosModule
+    DepartamentosModule,
+    ViajesModule
   ],
 })
 export class AppModule { }
