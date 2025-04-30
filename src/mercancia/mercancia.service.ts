@@ -77,12 +77,12 @@ export class MercanciaService {
             SET descripcion = ?, peso = ?, valor_estimado = ?, id_cliente = ?, id_viaje = ?
             WHERE id_mercancia = ?
         `, [descripcion, peso, valor_estimado, id_cliente, id_viaje, id]);
-    
+
         const [mercancia] = await this.dataSource.query(
             `SELECT * FROM Mercancia WHERE id_mercancia = ?`,
             [id],
         );
 
-        return {"message": `Mercancia con id ${id} actualizada`};
+        return { message: `Mercancia con id ${id} actualizada` };
     }
 }
