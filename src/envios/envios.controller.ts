@@ -1,11 +1,18 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { EnviosService } from './envios.service';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { CreateEnvioCheckoutDto } from './dto/envios.dto';
 
-@UseGuards(JwtAuthGuard)
 @Controller('envios')
 export class EnviosController {
-  constructor(private readonly enviosService: EnviosService) {}
+  constructor(private readonly enviosService: EnviosService) { }
 
-
+  @Get()
+  getAllWithDetalle() {
+    return this.enviosService.obtenerEnviosConDetalle();
+  }
+  
+  @Post()
+  createWithCheckout(@Body() dto: CreateEnvioCheckoutDto) {
+    return this.enviosService.crearEnvioConCheckout(dto);
+  }
 }
