@@ -23,7 +23,7 @@ export class BusesService {
                 JOIN Tipo_bus tb ON b.id_tipo_bus = tb.id_tipo_bus
                 JOIN Empresas e ON b.id_empresa = e.id_empresa
                 LEFT JOIN Empleados emp ON b.id_empleado = emp.cedula_empleado
-            WHERE deleted_at IS NULL
+            WHERE b.deleted_at IS NULL
             GROUP BY
                 b.Placa, b.Marca, b.Capacidad, tb.Nombre, e.Nombre, emp.Nombres, emp.Apellidos;
         `);
@@ -39,17 +39,22 @@ export class BusesService {
             id_empleado = null,
         } = dto;
 
+        const [existing] = await this.dataSource.query(
+            `SELECT Placa FROM Buses WHERE Placa = ?`,
+            [placa],
+        );
+        if (existing) {
+            throw new NotFoundException(`Bus con placa ${placa} ya existe`);
+        }
+
         await this.dataSource.query(`
             INSERT INTO Buses
             (Placa, Marca, Capacidad, id_tipo_bus, id_empresa, id_empleado)
             VALUES (?, ?, ?, ?, ?, ?)
         `, [placa, marca, capacidad, id_tipo_bus, id_empresa, id_empleado]);
 
-        const [bus] = await this.dataSource.query(
-            `SELECT * FROM Buses WHERE Placa = ?`,
-            [placa],
-        );
-        return bus;
+
+        return { message: "Bus creado con éxito" };
     }
 
     async updateBus(placa: string, dto: UpdateBusDto) {
@@ -78,11 +83,7 @@ export class BusesService {
             params,
         );
 
-        const [updated] = await this.dataSource.query(
-            `SELECT * FROM Buses WHERE Placa = ?`,
-            [placa],
-        );
-        return updated;
+        return { message: "Bus actualizado con éxito" };
     }
 
     async deleteBus(placa: string) {
@@ -99,7 +100,7 @@ export class BusesService {
             `UPDATE Buses SET deleted_at = NOW() WHERE Placa = ?`,
             [placa],
         );
-        return { deleted: true };
+        return { message: "Bus eliminado con éxito" };
     }
 
     async getBusTypes() {

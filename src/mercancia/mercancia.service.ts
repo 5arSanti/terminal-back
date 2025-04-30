@@ -47,7 +47,7 @@ export class MercanciaService {
             [descripcion, id_cliente],
         );
 
-        return mercancia;
+        return { message: 'Mercancia creada' };
     }
 
 
@@ -66,7 +66,7 @@ export class MercanciaService {
             [id_mercancia],
         );
 
-        return { deleted: true };
+        return { message: `Mercancia con id ${id_mercancia} eliminada` };
     }
 
     async updateMercancia(id: number, updateMercanciaDto: UpdateMercanciaDto) {
@@ -83,6 +83,6 @@ export class MercanciaService {
             [id],
         );
 
-        return mercancia;
+        return {"message": `Mercancia con id ${id} actualizada`};
     }
 }
