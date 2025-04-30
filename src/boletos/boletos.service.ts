@@ -8,7 +8,26 @@ export class BoletosService {
     constructor(@Inject("DATA_SOURCE") private readonly dataSource: DataSource) { }
 
     async getBoletos() {
-        return this.dataSource.query(`SELECT * FROM Boletos`);
+        return this.dataSource.query(`
+            SELECT 
+                bo.id_boleto,
+                bo.Numero_asiento,
+                d.Nombre AS destino,
+                r.Nombre AS ruta,
+                bo.id_empresa,
+                bo.id_bus,
+                bo.id_ruta,
+                bo.id_destino,
+                bus.Placa AS placa_bus,
+                bus.Capacidad AS capacidad_bus,
+                emp.Nombres AS conductor_nombre,
+                emp.Apellidos AS conductor_apellido
+            FROM Boletos bo
+            LEFT JOIN Destinos d ON bo.id_destino = d.id_destino
+            LEFT JOIN Rutas r ON bo.id_ruta = r.id_ruta
+            LEFT JOIN Buses bus ON bo.id_bus = bus.Placa
+            LEFT JOIN Empleados emp ON bus.id_empleado = emp.cedula_empleado
+        `);
     }
 
     async purchaseBoleto(dto: Omit<PurchaseBoletoDto, 'numero_asiento'>) {

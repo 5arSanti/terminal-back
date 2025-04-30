@@ -20,6 +20,7 @@ import { MercanciaModule } from './mercancia/mercancia.module';
 import { DepartamentosModule } from './departamentos/departamentos.module';
 import { ViajesModule } from './Viajes/viajes.module';
 import { EmpresasModule } from './empresas/empresas.module';
+import { MantenimientosModule } from './mantenimientos/mantenimientos.module';
 
 @Module({
   imports: [
@@ -49,7 +50,8 @@ import { EmpresasModule } from './empresas/empresas.module';
     MercanciaModule,
     DepartamentosModule,
     ViajesModule,
-    EmpresasModule
+    EmpresasModule,
+    MantenimientosModule
   ],
 })
 export class AppModule { }
