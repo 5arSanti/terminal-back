@@ -18,13 +18,13 @@ export class MercanciaController {
     return this.mercanciaService.createMercancia(dto);
   }
 
-  @Put(':id')  // PUT /mercancia/:id
-  update(@Param('id') id: string, @Body() dto: UpdateMercanciaDto) {
+  @Put(':id')
+  update(@Param('id') id: number, @Body() dto: UpdateMercanciaDto) {
     return this.mercanciaService.updateMercancia(id, dto);
   }
 
-  @Delete(':id')  // DELETE /mercancia/:id
-  delete(@Param('id') id: string) {
+  @Delete(':id')
+  delete(@Param('id') id: number) {
     return this.mercanciaService.deleteMercancia(id);
   }
 }

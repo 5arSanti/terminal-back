@@ -9,7 +9,7 @@ export class MercanciaService {
         @Inject('DATA_SOURCE') private readonly dataSource: DataSource,
     ) { }
 
- 
+
     async getMercancia() {
         return this.dataSource.query(`
             SELECT
@@ -19,12 +19,10 @@ export class MercanciaService {
                 m.valor_estimado,
                 m.id_cliente,
                 m.id_viaje
-            FROM 
-                Mercancia m
-            JOIN 
-                Cliente c ON m.id_cliente = c.id_cliente
-            JOIN 
-                Viajes v ON m.id_viaje = v.id_viaje;
+            FROM Mercancia m
+            JOIN Cliente c ON m.id_cliente = c.id_cliente
+            JOIN Viajes v ON m.id_viaje = v.id_viaje
+            WHERE m.deleted_at IS NULL;
         `);
     }
 
@@ -64,10 +62,27 @@ export class MercanciaService {
         }
 
         await this.dataSource.query(
-            `DELETE FROM Mercancia WHERE id_mercancia = ?`,
+            `UPDATE Mercancia SET deleted_at = NOW() WHERE id_mercancia = ?`,
             [id_mercancia],
         );
 
         return { deleted: true };
+    }
+
+    async updateMercancia(id: number, updateMercanciaDto: UpdateMercanciaDto) {
+        const { descripcion, peso, valor_estimado, id_cliente, id_viaje } = updateMercanciaDto;
+
+        await this.dataSource.query(`
+            UPDATE Mercancia
+            SET descripcion = ?, peso = ?, valor_estimado = ?, id_cliente = ?, id_viaje = ?
+            WHERE id_mercancia = ?
+        `, [descripcion, peso, valor_estimado, id_cliente, id_viaje, id]);
+    
+        const [mercancia] = await this.dataSource.query(
+            `SELECT * FROM Mercancia WHERE id_mercancia = ?`,
+            [id],
+        );
+
+        return mercancia;
     }
 }
