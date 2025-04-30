@@ -10,7 +10,7 @@ export class BusesService {
     ) { }
 
     async getBuses() {
-        return this.dataSource.query(`
+        return this.dataSource.query(` 
             SELECT
                 b.Placa,
                 b.Marca,
@@ -23,6 +23,7 @@ export class BusesService {
                 JOIN Tipo_bus tb ON b.id_tipo_bus = tb.id_tipo_bus
                 JOIN Empresas e ON b.id_empresa = e.id_empresa
                 LEFT JOIN Empleados emp ON b.id_empleado = emp.cedula_empleado
+            WHERE deleted_at IS NULL
             GROUP BY
                 b.Placa, b.Marca, b.Capacidad, tb.Nombre, e.Nombre, emp.Nombres, emp.Apellidos;
         `);
@@ -95,7 +96,7 @@ export class BusesService {
         }
 
         await this.dataSource.query(
-            `DELETE FROM Buses WHERE Placa = ?`,
+            `UPDATE Buses SET deleted_at = NOW() WHERE Placa = ?`,
             [placa],
         );
         return { deleted: true };
