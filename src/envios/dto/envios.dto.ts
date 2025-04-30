@@ -1,5 +1,4 @@
-import { Type } from 'class-transformer';
-import { IsDecimal, IsInt, IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class CreateEnvioCheckoutDto {
   @IsInt()
