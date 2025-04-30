@@ -26,6 +26,7 @@ export class EmpresasService {
             empresa.direccion,
             empresa.id_tipo_empresa,
         ];
+        
         await this.dataSource.query(query, values);
         return { message: 'Empresa creada exitosamente' };
     }
