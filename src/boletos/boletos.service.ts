@@ -15,21 +15,34 @@ export class BoletosService {
                 d.Nombre AS destino,
                 r.Nombre AS ruta,
                 bo.id_empresa,
+                e.Nombre AS empresa_nombre,
                 bo.id_bus,
-                bo.id_ruta,
-                bo.id_destino,
                 bus.Placa AS placa_bus,
                 bus.Capacidad AS capacidad_bus,
                 emp.Nombres AS conductor_nombre,
-                emp.Apellidos AS conductor_apellido
+                emp.Apellidos AS conductor_apellido,
+                v.id_viaje,
+                v.Fecha_salida AS fecha_viaje,
+                v.id_ciudad_origen,
+                co.Nombre AS ciudad_origen,
+                v.id_ciudad_destino,
+                cd.Nombre AS ciudad_destino,
+                mp.Nombre AS metodo_pago,
+                f.Valor_total AS valor_factura,
+                f.Fecha_facturacion AS fecha_factura
             FROM Boletos bo
             LEFT JOIN Destinos d ON bo.id_destino = d.id_destino
             LEFT JOIN Rutas r ON bo.id_ruta = r.id_ruta
             LEFT JOIN Buses bus ON bo.id_bus = bus.Placa
             LEFT JOIN Empleados emp ON bus.id_empleado = emp.cedula_empleado
+            LEFT JOIN Empresas e ON bo.id_empresa = e.id_empresa
+            LEFT JOIN Viajes v ON v.id_bus = bo.id_bus AND v.id_ruta = bo.id_ruta
+            LEFT JOIN Ciudades co ON v.id_ciudad_origen = co.id_ciudad
+            LEFT JOIN Ciudades cd ON v.id_ciudad_destino = cd.id_ciudad
+            LEFT JOIN Factura f ON bo.id_boleto = f.id_boleto
+            LEFT JOIN Metodo_pago mp ON f.id_metodo_pago = mp.id_metodo_pago
         `);
     }
-
     async purchaseBoleto(dto: Omit<PurchaseBoletoDto, 'numero_asiento'>) {
         const qr = this.dataSource.createQueryRunner();
         await qr.connect();
