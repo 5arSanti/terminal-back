@@ -19,6 +19,7 @@ import { MetodosPagoModule } from './metodos-pago/metodos-pago.module';
 import { MercanciaModule } from './mercancia/mercancia.module';
 import { DepartamentosModule } from './departamentos/departamentos.module';
 import { ViajesModule } from './Viajes/viajes.module';
+import { EmpresasModule } from './empresas/empresas.module';
 
 @Module({
   imports: [
@@ -47,7 +48,8 @@ import { ViajesModule } from './Viajes/viajes.module';
     MetodosPagoModule,
     MercanciaModule,
     DepartamentosModule,
-    ViajesModule
+    ViajesModule,
+    EmpresasModule
   ],
 })
 export class AppModule { }
