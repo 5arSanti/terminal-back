@@ -17,6 +17,7 @@ import { BoletosModule } from './boletos/boletos.module';
 import { ClientesModule } from './clientes/clientes.module';
 import { MetodosPagoModule } from './metodos-pago/metodos-pago.module';
 import { MercanciaModule } from './mercancia/mercancia.module';
+import { DepartamentosModule } from './departamentos/departamentos.module';
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import { MercanciaModule } from './mercancia/mercancia.module';
     BoletosModule,
     ClientesModule,
     MetodosPagoModule,
-    MercanciaModule
+    MercanciaModule,
+    DepartamentosModule
   ],
 })
 export class AppModule { }

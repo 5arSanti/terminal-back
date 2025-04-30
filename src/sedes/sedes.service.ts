@@ -47,6 +47,7 @@ export class SedesService {
     async getParadasIntermedias() {
         return await this.dataSource.query(`
             SELECT * FROM Paradas_intermedias
+            LEFT JOIN Ciudades ON Paradas_intermedias.id_ciudad = Ciudades.id_ciudad
         `);
     }
 }
