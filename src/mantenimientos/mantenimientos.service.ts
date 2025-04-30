@@ -33,7 +33,7 @@ export class MantenimientosService {
 
     async obtenerTiposMantenimiento() {
         const query = `
-        SELECT * FROM Tipo_mantenimiento
+            SELECT * FROM Tipo_mantenimiento
         `;
         const result = await this.dataSource.query(query);
         return result;
