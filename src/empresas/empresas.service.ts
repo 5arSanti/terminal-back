@@ -26,7 +26,7 @@ export class EmpresasService {
             empresa.direccion,
             empresa.id_tipo_empresa,
         ];
-        
+
         await this.dataSource.query(query, values);
         return { message: 'Empresa creada exitosamente' };
     }
@@ -60,5 +60,12 @@ export class EmpresasService {
         `;
         await this.dataSource.query(query, [id]);
         return { message: 'Empresa eliminada correctamente' };
+    }
+
+    async getEmpresasTypes() {
+        const query = `
+            SELECT * FROM Tipo_empresa
+        `;
+        return await this.dataSource.query(query);
     }
 }

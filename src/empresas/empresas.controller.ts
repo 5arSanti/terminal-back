@@ -25,4 +25,9 @@ export class EmpresasController {
   async eliminarEmpresa(@Param('id') id: string) {
     return await this.empresasService.eliminarEmpresa(+id);
   }
+
+  @Get("types")
+  async getEmpresasTypes() {
+    return await this.empresasService.getEmpresasTypes();
+  }
 }
