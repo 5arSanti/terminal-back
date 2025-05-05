@@ -4,7 +4,7 @@ import { ViajesService } from './viajes.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('viajes')
 export class ViajesController {
   constructor(private readonly viajesService: ViajesService) { }

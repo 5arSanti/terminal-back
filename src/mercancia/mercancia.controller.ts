@@ -3,7 +3,7 @@ import { MercanciaService } from './mercancia.service';
 import { CreateMercanciaDto, UpdateMercanciaDto } from './dto/mercancia.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';  // Asegúrate de importar el guard JWT
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('mercancia')  // La ruta base es /mercancia
 export class MercanciaController {
   constructor(private readonly mercanciaService: MercanciaService) {}

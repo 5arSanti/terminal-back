@@ -13,7 +13,7 @@ import { BusesService } from './buses.service';
 import { CreateBusDto, CreateBusTypeDto, UpdateBusDto } from './dto/buses.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('buses')
 export class BusesController {
   constructor(private readonly busesService: BusesService) { }

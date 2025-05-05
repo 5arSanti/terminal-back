@@ -10,7 +10,7 @@ export class UsersController {
     private usersService: UsersService
   ) { }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   async getUsers(@Query() usersFilters: FilterUsersDTO): Promise<UserResponseDTO[] | UserPrimaryInfoDTO[]> {
     return await this.usersService.getUsers(usersFilters);
@@ -22,7 +22,7 @@ export class UsersController {
     return await this.usersService.registrarUsuario(userInfo);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Delete()
   async deleteUser(@Query() user: UserIdDTO) {
     return await this.usersService.deleteUser(user);
